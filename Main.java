@@ -4,8 +4,15 @@ import java.awt.*;
 public class Main {
 
     public static void setUp() {
-        JFrame window = new JFrame();
-        window.setSize(500,500);
+        Board othelloBoard = new Board();
+        JFrame window = new JFrame("Othello");
+        for (int i = 0; i < othelloBoard.getBoardWidth(); i++) {
+            for (int j = 0; j < othelloBoard.getBoardHeight(); j++) {
+                window.add(othelloBoard.getImageButtons()[i][j]);
+            }
+        }
+
+        window.setSize(600,700);
         window.setLayout(null);
         window.setVisible(true);
         window.setResizable(false);
@@ -13,7 +20,6 @@ public class Main {
 
     public static void main(String[] args){
         setUp();
-        System.out.println("foo");
 
     }
 }
