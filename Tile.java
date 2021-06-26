@@ -17,6 +17,6 @@ public class Tile extends JButton {
         emptySlot = new ImageIcon("src/othello_emptySlot.png");
         whiteChip = new ImageIcon("src/othello_whiteChip.png");
         grayChip = new ImageIcon("src/othello_grayChip.png");
-        this.setIcon(whiteChip);
+        this.setIcon(emptySlot);
     }
 }

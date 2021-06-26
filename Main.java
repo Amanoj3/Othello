@@ -13,6 +13,7 @@ public class Main {
         }
 
         window.setSize(600,700);
+        window.getContentPane().setBackground(Color.lightGray);
         window.setLayout(null);
         window.setVisible(true);
         window.setResizable(false);
