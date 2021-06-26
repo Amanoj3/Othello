@@ -5,7 +5,7 @@ public class Board {
     private int numSlots;
     private int boardWidth;
     private int boardHeight;
-    private JButton[][] imageButtons;
+    private Tile[][] imageButtons;
     private Icon emptySlot;
     private Icon whiteChip;
     private Icon grayChip;
@@ -16,14 +16,14 @@ public class Board {
     public int getBoardHeight() {
         return this.boardHeight;
     }
-    public JButton[][] getImageButtons() {
+    public Tile[][] getImageButtons() {
         return this.imageButtons;
     }
 
     Board() {
         boardWidth = 8;
         boardHeight = 8;
-        imageButtons = new JButton[boardWidth][boardHeight];
+        imageButtons = new Tile[boardWidth][boardHeight];
         numSlots = boardWidth*boardHeight;
         emptySlot = new ImageIcon("src/othello_emptySlot.png");
         whiteChip = new ImageIcon("src/othello_whiteChip.png");
@@ -35,7 +35,7 @@ public class Board {
         for (int i = 0; i < boardWidth; i++) {
             startingY = 450;
             for (int j = 0; j < boardHeight; j++) {
-                JButton currentButton = new JButton(emptySlot);
+                Tile currentButton = new Tile();
                 imageButtons[i][j] = currentButton;
                 imageButtons[i][j].setBounds(startingX, startingY, 50, 50);
                 startingY = startingY - incrementFactorY;
