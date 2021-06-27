@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Main {
+public class Main { // the driver file - also contains the view
 
     public static void setUp() {
         Board othelloBoard = new Board();
