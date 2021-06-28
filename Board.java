@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Board { // includes the board and the game logic
     private static Tile pressedTile;
@@ -34,10 +35,21 @@ public class Board { // includes the board and the game logic
     }
 
     public void enableValidTiles() {
+        ArrayList<Tile> currentEmptyTiles = new ArrayList<Tile>();
         //note to self: check diagonals, horizontal and vertical lines
         if (whoseTurn.equals("white")) {
-            //search for a line
-        }
+            for (int i = 0; i < boardWidth; i++) {
+                for (int j = 0; j < boardHeight; j++) {
+                    if (imageButtons[i][j].getCurrentIcon().equals("empty")) {
+                        currentEmptyTiles.add(imageButtons[i][j]);
+                    }
+                } // inner loop
+            } //outer loop
+
+
+
+            System.out.println("Number of empty tiles: " + currentEmptyTiles.size());
+        } //end if statement for white
     }
 
     public int getBoardWidth() {
@@ -103,6 +115,7 @@ public class Board { // includes the board and the game logic
             }
             startingX = startingX + incrementFactorX;
         }
+        enableValidTiles();
         //disableTiles();
     }
 }
