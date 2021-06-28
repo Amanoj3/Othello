@@ -4,9 +4,17 @@ public class Tile extends JButton {
     private final Icon whiteChip;
     private final Icon grayChip;
     private String currentIcon;
-
+    private int xCoordinate, yCoordinate; // so we can determine the location of the tile
     public String getCurrentIcon() {
         return this.currentIcon;
+    }
+
+    int getxCoordinate() {
+        return this.xCoordinate;
+    }
+
+    int getyCoordinate() {
+        return this.yCoordinate;
     }
 
     void setWhiteChip() {
@@ -19,7 +27,9 @@ public class Tile extends JButton {
         currentIcon = "gray";
     }
 
-    Tile() {
+    Tile(int x, int y) {
+        xCoordinate = x;
+        yCoordinate = y;
         currentIcon = "empty";
         Icon emptySlot = new ImageIcon("src/othello_emptySlot.png");
         whiteChip = new ImageIcon("src/othello_whiteChip.png");

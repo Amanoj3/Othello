@@ -46,6 +46,35 @@ public class Board { // includes the board and the game logic
                 } // inner loop
             } //outer loop
 
+            //upper left diagonal
+            for (Tile currentEmptyTile : currentEmptyTiles) { // for each tile, do..
+                boolean breakMode = false;
+                ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
+                for (int x = currentEmptyTile.getxCoordinate() - 1; x >= 0; x--) {
+                    if (breakMode) {
+                        break;
+                    }
+                    for (int y = currentEmptyTile.getxCoordinate() + 1; y < boardHeight; y++) {
+                        if (imageButtons[x][y].getCurrentIcon().equals("empty") ||
+                                imageButtons[x][y].getCurrentIcon().equals("white")) {
+                            upperLeftTiles.add(imageButtons[x][y]);
+                            breakMode = true;
+                            break;
+                        }
+                        upperLeftTiles.add(imageButtons[x][y]);
+                    }
+                }
+                if (upperLeftTiles.size() != 0) {
+                    if (upperLeftTiles.get(upperLeftTiles.size()-1).getCurrentIcon().equals("white")){
+                        if (upperLeftTiles.size() >= 3) {
+                            currentEmptyTile.setEnabled(true);
+                        }
+                    }
+                }
+            }
+            //up
+
+            // upper right diagonal
 
 
             System.out.println("Number of empty tiles: " + currentEmptyTiles.size());
@@ -79,7 +108,7 @@ public class Board { // includes the board and the game logic
         for (int i = 0; i < boardWidth; i++) {
             startingY = 450;
             for (int j = 0; j < boardHeight; j++) { // middle buttons: (3,4), (4,4) = gray, (3,3) = gray, (4,3)
-                Tile currentButton = new Tile();
+                Tile currentButton = new Tile(i,j);
                 int finalI = i;
                 int finalJ = j;
                 currentButton.addActionListener(new ActionListener() { //"two or more, use a for" - E. Dijkstra
@@ -116,6 +145,6 @@ public class Board { // includes the board and the game logic
             startingX = startingX + incrementFactorX;
         }
         enableValidTiles();
-        //disableTiles();
+        disableTiles();
     }
 }
