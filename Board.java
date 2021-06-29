@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Board { // includes the board and the game logic
@@ -36,50 +37,41 @@ public class Board { // includes the board and the game logic
 
     public void enableValidTiles() {
         ArrayList<Tile> currentEmptyTiles = new ArrayList<Tile>();
-        //note to self: check diagonals, horizontal and vertical lines
+        for (int x = 0; x < boardWidth; x++) { // iterate through the tiles and add empty ones to the arraylist
+            for (int y = 0; y < boardHeight; y++) {
+                if (imageButtons[x][y].getCurrentIcon().equals("empty")) {
+                    currentEmptyTiles.add(imageButtons[x][y]);
+                }
+            }
+        }
         if (whoseTurn.equals("white")) {
-            for (int i = 0; i < boardWidth; i++) {
-                for (int j = 0; j < boardHeight; j++) {
-                    if (imageButtons[i][j].getCurrentIcon().equals("empty")) {
-                        currentEmptyTiles.add(imageButtons[i][j]);
-                    }
-                } // inner loop
-            } //outer loop
-
-            //upper left diagonal
-            for (Tile currentEmptyTile : currentEmptyTiles) { // for each tile, do..
-                boolean breakMode = false;
+            //check upper left diagonal
+            for (int i = 0; i < currentEmptyTiles.size(); i++) {
                 ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
-                for (int x = currentEmptyTile.getxCoordinate() - 1; x >= 0; x--) {
-                    if (breakMode) {
+                int currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
+                int currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
+                while (currentX >=0 && currentY < boardHeight) {
+                    if (imageButtons[currentX][currentY].getCurrentIcon().equals("empty") ||
+                            imageButtons[currentX][currentY].getCurrentIcon().equals("white")) {
+                        upperLeftTiles.add(imageButtons[currentX][currentY]);
                         break;
                     }
-                    for (int y = currentEmptyTile.getxCoordinate() + 1; y < boardHeight; y++) {
-                        if (imageButtons[x][y].getCurrentIcon().equals("empty") ||
-                                imageButtons[x][y].getCurrentIcon().equals("white")) {
-                            upperLeftTiles.add(imageButtons[x][y]);
-                            breakMode = true;
-                            break;
-                        }
-                        upperLeftTiles.add(imageButtons[x][y]);
+                    else {
+                        upperLeftTiles.add(imageButtons[currentX][currentY]);
                     }
+                    currentX--;
+                    currentY++;
                 }
                 if (upperLeftTiles.size() != 0) {
                     if (upperLeftTiles.get(upperLeftTiles.size()-1).getCurrentIcon().equals("white")){
                         if (upperLeftTiles.size() >= 3) {
-                            currentEmptyTile.setEnabled(true);
+                            currentEmptyTiles.get(i).setEnabled(true);
                         }
                     }
                 }
             }
-            //up
-
-            // upper right diagonal
-
-
-            System.out.println("Number of empty tiles: " + currentEmptyTiles.size());
-        } //end if statement for white
-    }
+        }//end-if for white
+    } // end enableValidTile method
 
     public int getBoardWidth() {
         return this.boardWidth;
@@ -129,12 +121,12 @@ public class Board { // includes the board and the game logic
                 //currentButton.setDisabledIcon(emptySlot);
                 //currentButton.setEnabled(false);
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
-                    currentButton.setWhiteChip();
+                    currentButton.setGrayChip();
                     //currentButton.setDisabledIcon(whiteChip);
                     //currentButton.setEnabled(false);
                 }
                 if ((i == 4 & j == 4) || (i == 3 && j ==3)) {
-                    currentButton.setGrayChip();
+                    currentButton.setWhiteChip();
                     //currentButton.setDisabledIcon(grayChip);
                     //currentButton.setEnabled(false);
                 }
@@ -144,7 +136,8 @@ public class Board { // includes the board and the game logic
             }
             startingX = startingX + incrementFactorX;
         }
-        enableValidTiles();
+        imageButtons[2][5].setWhiteChip();
         disableTiles();
-    }
+        enableValidTiles();
+    }//end board constructor
 }
