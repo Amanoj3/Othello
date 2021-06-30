@@ -45,9 +45,10 @@ public class Board { // includes the board and the game logic
             }
         }
         if (whoseTurn.equals("white")) {
-            //check upper left diagonal
-            for (int i = 0; i < currentEmptyTiles.size(); i++) {
+            for (int i = 0; i < currentEmptyTiles.size(); i++) { //for each tile, do..
                 ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
+
+                //check upper left diagonal
                 int currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
                 int currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
                 while (currentX >=0 && currentY < boardHeight) {
@@ -64,12 +65,63 @@ public class Board { // includes the board and the game logic
                 }
                 if (upperLeftTiles.size() != 0) {
                     if (upperLeftTiles.get(upperLeftTiles.size()-1).getCurrentIcon().equals("white")){
-                        if (upperLeftTiles.size() >= 3) {
+                        if (upperLeftTiles.size() >= 2) {
                             currentEmptyTiles.get(i).setEnabled(true);
                         }
                     }
+                }// end upper left check
+
+                //check upper
+                currentX = currentEmptyTiles.get(i).getxCoordinate();
+                currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
+                ArrayList<Tile> upperTiles = new ArrayList<>();
+                while (currentY < boardHeight) {
+                    if (imageButtons[currentX][currentY].getCurrentIcon().equals("empty")
+                    || imageButtons[currentX][currentY].getCurrentIcon().equals("white")) {
+                        upperTiles.add(imageButtons[currentX][currentY]);
+                        break;
+                    }
+                    else {
+                        upperTiles.add(imageButtons[currentX][currentY]);
+                    }
+                    currentY++;
                 }
-            }
+                if (upperTiles.size() != 0) {
+                    if (upperTiles.get(upperTiles.size()-1).getCurrentIcon().equals("white")) {
+                        if (upperTiles.size() >= 2) {
+                            currentEmptyTiles.get(i).setEnabled(true);
+                        }
+                    }
+                }//end upper check
+
+                //upper right check
+                currentX = currentEmptyTiles.get(i).getxCoordinate()+1;
+                currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
+                ArrayList<Tile> upperRightTiles = new ArrayList<Tile>();
+                while (currentX < boardWidth && currentY < boardHeight) {
+                    if (imageButtons[currentX][currentY].getCurrentIcon().equals("empty")
+                            || imageButtons[currentX][currentY].getCurrentIcon().equals("white")) {
+                        upperRightTiles.add(imageButtons[currentX][currentY]);
+                        break;
+                    }
+                    else {
+                        upperRightTiles.add(imageButtons[currentX][currentY]);
+                    }
+                    currentX++;
+                    currentY++;
+                }
+                if (upperRightTiles.size() != 0) {
+                    if (upperRightTiles.get(upperRightTiles.size()-1).getCurrentIcon().equals("white")) {
+                        if (upperRightTiles.size() >= 2) {
+                            currentEmptyTiles.get(i).setEnabled(true);
+                        }
+                    }
+                }//end upper check
+
+
+            }//end for each tile loop
+
+
         }//end-if for white
     } // end enableValidTile method
 
@@ -121,22 +173,23 @@ public class Board { // includes the board and the game logic
                 //currentButton.setDisabledIcon(emptySlot);
                 //currentButton.setEnabled(false);
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
-                    currentButton.setGrayChip();
+                    //currentButton.setGrayChip();
                     //currentButton.setDisabledIcon(whiteChip);
                     //currentButton.setEnabled(false);
                 }
                 if ((i == 4 & j == 4) || (i == 3 && j ==3)) {
-                    currentButton.setWhiteChip();
+                    //currentButton.setWhiteChip();
                     //currentButton.setDisabledIcon(grayChip);
                     //currentButton.setEnabled(false);
                 }
+
                 imageButtons[i][j] = currentButton;
                 imageButtons[i][j].setBounds(startingX, startingY, 50, 50);
                 startingY = startingY - incrementFactorY;
             }
             startingX = startingX + incrementFactorX;
         }
-        imageButtons[2][5].setWhiteChip();
+
         disableTiles();
         enableValidTiles();
     }//end board constructor
