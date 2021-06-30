@@ -13,7 +13,7 @@ public class Main { // the driver file - also contains the view
         JLabel[] yCoordinateLabels = new JLabel[8];
 
         for (int i = 0; i < 8; i++) {
-            //initialize the labels
+            //initialize the labels individually
             xCoordinateLabels[i] = new JLabel(Integer.toString(i));
             yCoordinateLabels[i] = new JLabel(Integer.toString(i));
             //set font and size

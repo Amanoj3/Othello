@@ -18,22 +18,6 @@ public class Board implements gameLogic{ // includes the board, which implements
     public boolean gameOver() {
         return numSlots == 0;
     }
-    public void disableTiles() {
-        for (int i = 0; i < boardWidth; i++) {
-            for (int j = 0; j < boardHeight; j++) {
-                if (imageButtons[i][j].getCurrentIcon().equals("white")) {
-                    imageButtons[i][j].setDisabledIcon(whiteChip);
-                }
-                else if (imageButtons[i][j].getCurrentIcon().equals("gray")) {
-                    imageButtons[i][j].setDisabledIcon(grayChip);
-                }
-                else {
-                    imageButtons[i][j].setDisabledIcon(emptySlot);
-                }
-                imageButtons[i][j].setEnabled(false);
-            }
-        }
-    }
 
     public void enableValidTiles() {
         ArrayList<Tile> currentEmptyTiles = obtainEmptyTiles(imageButtons,boardWidth,boardHeight);
@@ -99,7 +83,96 @@ public class Board implements gameLogic{ // includes the board, which implements
                 }//end upper right check
 
                 //lower left check
+                currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
+                currentY = currentEmptyTiles.get(i).getyCoordinate()-1;
+                ArrayList<Tile> lowerLeftTiles = new ArrayList<Tile>();
+                while (currentX >= 0 && currentY >=0) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
+                        lowerLeftTiles.add(imageButtons[currentX][currentY]);
+                        break;
+                    }
+                    else {
+                        lowerLeftTiles.add(imageButtons[currentX][currentY]);
+                    }
+                    currentX--;
+                    currentY--;
+                }
+                if (isValidCombination(lowerLeftTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
+                }// end lower left check
 
+                //lower check
+                currentX = currentEmptyTiles.get(i).getxCoordinate();
+                currentY = currentEmptyTiles.get(i).getyCoordinate()-1;
+                ArrayList<Tile> lowerTiles = new ArrayList<Tile>();
+                while (currentY >= 0) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
+                        lowerTiles.add(imageButtons[currentX][currentY]);
+                        break;
+                    }
+                    else {
+                        lowerTiles.add(imageButtons[currentX][currentX]);
+                    }
+                    currentY--;
+                }
+                if (isValidCombination(lowerTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
+                }// end lower check
+
+                //lower right check
+                currentX = currentEmptyTiles.get(i).getxCoordinate()+1;
+                currentY = currentEmptyTiles.get(i).getyCoordinate()-1;
+                ArrayList<Tile> lowerRightTiles = new ArrayList<Tile>();
+                while (currentX < boardWidth && currentY >=0) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
+                        lowerRightTiles.add(imageButtons[currentX][currentY]);
+                        break;
+                    }
+                    else {
+                        lowerRightTiles.add(imageButtons[currentX][currentY]);
+                    }
+                    currentX++;
+                    currentY--;
+                }
+                if (isValidCombination(lowerRightTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
+                }//end lower right check
+
+                //left check
+                currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
+                currentY = currentEmptyTiles.get(i).getyCoordinate();
+                ArrayList<Tile> leftTiles = new ArrayList<Tile>();
+                while (currentX >= 0) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
+                        leftTiles.add(imageButtons[currentX][currentY]);
+                        break;
+                    }
+                    else {
+                        leftTiles.add(imageButtons[currentX][currentY]);
+                    }
+                    currentX--;
+                }
+                if (isValidCombination(leftTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
+                }// end left check
+
+                //right check
+                currentX = currentEmptyTiles.get(i).getxCoordinate()+1;
+                currentY = currentEmptyTiles.get(i).getyCoordinate();
+                ArrayList<Tile> rightTiles = new ArrayList<Tile>();
+                while (currentX < boardWidth) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
+                        rightTiles.add(imageButtons[currentX][currentY]);
+                        break;
+                    }
+                    else {
+                        rightTiles.add(imageButtons[currentX][currentY]);
+                    }
+                    currentX++;
+                }
+                if (isValidCombination(rightTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
+                }// end right check
 
             }//end for each tile loop
 
@@ -154,10 +227,10 @@ public class Board implements gameLogic{ // includes the board, which implements
                 });
 
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
-                    currentButton.setGrayChip();
+                    currentButton.setWhiteChip();
                 }
                 if ((i == 4 & j == 4) || (i == 3 && j ==3)) {
-                    currentButton.setWhiteChip();
+                    currentButton.setGrayChip();
                 }
 
                 imageButtons[i][j] = currentButton;
@@ -167,7 +240,7 @@ public class Board implements gameLogic{ // includes the board, which implements
             startingX = startingX + incrementFactorX;
         }
 
-        disableTiles();
+        disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
         enableValidTiles();
     }//end board constructor
 }

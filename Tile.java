@@ -4,7 +4,8 @@ public class Tile extends JButton {
     private final Icon whiteChip;
     private final Icon grayChip;
     private String currentIcon;
-    private int xCoordinate, yCoordinate; // so we can determine the location of the tile
+    private final int xCoordinate;
+    private final int yCoordinate; // so we can determine the location of the tile
     public String getCurrentIcon() {
         return this.currentIcon;
     }
