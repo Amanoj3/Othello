@@ -35,6 +35,21 @@ public class Board { // includes the board and the game logic
         }
     }
 
+    public boolean emptyOrWhite(Tile tile) {
+        return tile.getCurrentIcon().equals("white") || tile.getCurrentIcon().equals("empty");
+    }
+
+    public boolean isValidCombination(ArrayList<Tile> tiles, String whoseTurn) {
+        if (tiles.size() != 0) {
+            if (tiles.get(tiles.size()-1).getCurrentIcon().equals(whoseTurn)){
+                if (tiles.size() >= 2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void enableValidTiles() {
         ArrayList<Tile> currentEmptyTiles = new ArrayList<Tile>();
         for (int x = 0; x < boardWidth; x++) { // iterate through the tiles and add empty ones to the arraylist
@@ -52,8 +67,7 @@ public class Board { // includes the board and the game logic
                 int currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
                 int currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
                 while (currentX >=0 && currentY < boardHeight) {
-                    if (imageButtons[currentX][currentY].getCurrentIcon().equals("empty") ||
-                            imageButtons[currentX][currentY].getCurrentIcon().equals("white")) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
                         upperLeftTiles.add(imageButtons[currentX][currentY]);
                         break;
                     }
@@ -63,12 +77,9 @@ public class Board { // includes the board and the game logic
                     currentX--;
                     currentY++;
                 }
-                if (upperLeftTiles.size() != 0) {
-                    if (upperLeftTiles.get(upperLeftTiles.size()-1).getCurrentIcon().equals("white")){
-                        if (upperLeftTiles.size() >= 2) {
-                            currentEmptyTiles.get(i).setEnabled(true);
-                        }
-                    }
+
+                if (isValidCombination(upperLeftTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
                 }// end upper left check
 
                 //check upper
@@ -76,8 +87,7 @@ public class Board { // includes the board and the game logic
                 currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
                 ArrayList<Tile> upperTiles = new ArrayList<>();
                 while (currentY < boardHeight) {
-                    if (imageButtons[currentX][currentY].getCurrentIcon().equals("empty")
-                    || imageButtons[currentX][currentY].getCurrentIcon().equals("white")) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
                         upperTiles.add(imageButtons[currentX][currentY]);
                         break;
                     }
@@ -86,12 +96,9 @@ public class Board { // includes the board and the game logic
                     }
                     currentY++;
                 }
-                if (upperTiles.size() != 0) {
-                    if (upperTiles.get(upperTiles.size()-1).getCurrentIcon().equals("white")) {
-                        if (upperTiles.size() >= 2) {
-                            currentEmptyTiles.get(i).setEnabled(true);
-                        }
-                    }
+
+                if (isValidCombination(upperTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
                 }//end upper check
 
                 //upper right check
@@ -99,8 +106,7 @@ public class Board { // includes the board and the game logic
                 currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
                 ArrayList<Tile> upperRightTiles = new ArrayList<Tile>();
                 while (currentX < boardWidth && currentY < boardHeight) {
-                    if (imageButtons[currentX][currentY].getCurrentIcon().equals("empty")
-                            || imageButtons[currentX][currentY].getCurrentIcon().equals("white")) {
+                    if (emptyOrWhite(imageButtons[currentX][currentY])) {
                         upperRightTiles.add(imageButtons[currentX][currentY]);
                         break;
                     }
@@ -110,13 +116,11 @@ public class Board { // includes the board and the game logic
                     currentX++;
                     currentY++;
                 }
-                if (upperRightTiles.size() != 0) {
-                    if (upperRightTiles.get(upperRightTiles.size()-1).getCurrentIcon().equals("white")) {
-                        if (upperRightTiles.size() >= 2) {
-                            currentEmptyTiles.get(i).setEnabled(true);
-                        }
-                    }
-                }//end upper check
+                if (isValidCombination(upperRightTiles,whoseTurn)) {
+                    currentEmptyTiles.get(i).setEnabled(true);
+                }//end upper right check
+
+                //lower left check
 
 
             }//end for each tile loop
@@ -173,12 +177,12 @@ public class Board { // includes the board and the game logic
                 //currentButton.setDisabledIcon(emptySlot);
                 //currentButton.setEnabled(false);
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
-                    //currentButton.setGrayChip();
+                    currentButton.setGrayChip();
                     //currentButton.setDisabledIcon(whiteChip);
                     //currentButton.setEnabled(false);
                 }
                 if ((i == 4 & j == 4) || (i == 3 && j ==3)) {
-                    //currentButton.setWhiteChip();
+                    currentButton.setWhiteChip();
                     //currentButton.setDisabledIcon(grayChip);
                     //currentButton.setEnabled(false);
                 }
