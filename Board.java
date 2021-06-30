@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Board { // includes the board and the game logic
+public class Board implements gameLogic{ // includes the board, which implements the gameLogic interface
     private static Tile pressedTile;
     private int numSlots;
     private final int boardWidth;
@@ -35,30 +35,8 @@ public class Board { // includes the board and the game logic
         }
     }
 
-    public boolean emptyOrWhite(Tile tile) {
-        return tile.getCurrentIcon().equals("white") || tile.getCurrentIcon().equals("empty");
-    }
-
-    public boolean isValidCombination(ArrayList<Tile> tiles, String whoseTurn) {
-        if (tiles.size() != 0) {
-            if (tiles.get(tiles.size()-1).getCurrentIcon().equals(whoseTurn)){
-                if (tiles.size() >= 2) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public void enableValidTiles() {
-        ArrayList<Tile> currentEmptyTiles = new ArrayList<Tile>();
-        for (int x = 0; x < boardWidth; x++) { // iterate through the tiles and add empty ones to the arraylist
-            for (int y = 0; y < boardHeight; y++) {
-                if (imageButtons[x][y].getCurrentIcon().equals("empty")) {
-                    currentEmptyTiles.add(imageButtons[x][y]);
-                }
-            }
-        }
+        ArrayList<Tile> currentEmptyTiles = obtainEmptyTiles(imageButtons,boardWidth,boardHeight);
         if (whoseTurn.equals("white")) {
             for (int i = 0; i < currentEmptyTiles.size(); i++) { //for each tile, do..
                 ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
@@ -174,17 +152,12 @@ public class Board { // includes the board and the game logic
                         System.out.println("Now, it is " + whoseTurn + "'s turn!");
                     }
                 });
-                //currentButton.setDisabledIcon(emptySlot);
-                //currentButton.setEnabled(false);
+
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
                     currentButton.setGrayChip();
-                    //currentButton.setDisabledIcon(whiteChip);
-                    //currentButton.setEnabled(false);
                 }
                 if ((i == 4 & j == 4) || (i == 3 && j ==3)) {
                     currentButton.setWhiteChip();
-                    //currentButton.setDisabledIcon(grayChip);
-                    //currentButton.setEnabled(false);
                 }
 
                 imageButtons[i][j] = currentButton;
