@@ -6,7 +6,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Board implements gameLogic{ // includes the board, which implements the gameLogic interface
-    private static Tile pressedTile;
     private int numSlots;
     private final int boardWidth;
     private final int boardHeight;
@@ -23,6 +22,7 @@ public class Board implements gameLogic{ // includes the board, which implements
         ArrayList<Tile> currentEmptyTiles = obtainEmptyTiles(imageButtons,boardWidth,boardHeight);
         if (whoseTurn.equals("white")) {
             for (int i = 0; i < currentEmptyTiles.size(); i++) { //for each tile, do..
+                // this loop checks if there are valid combinations for every empty tile
                 ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
 
                 //check upper left diagonal
@@ -210,20 +210,19 @@ public class Board implements gameLogic{ // includes the board, which implements
                 Tile currentButton = new Tile(i,j);
                 int finalI = i;
                 int finalJ = j;
-                currentButton.addActionListener(new ActionListener() { //"two or more, use a for" - E. Dijkstra
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        System.out.println("You pressed button " + finalI + "," + finalJ);
-                        System.out.println("It was " + whoseTurn + "'s turn!");
-                        moveCounter++;
-                        if (moveCounter % 2 == 1) {
-                            whoseTurn = "gray";
-                        }
-                        if (moveCounter % 2 == 0) {
-                            whoseTurn = "white";
-                        }
-                        System.out.println("Now, it is " + whoseTurn + "'s turn!");
+                //"two or more, use a for" - E. Dijkstra
+// so each button would be able to detect clicks
+                currentButton.addActionListener(e -> {
+                    System.out.println("You pressed button " + finalI + "," + finalJ);
+                    System.out.println("It was " + whoseTurn + "'s turn!");
+                    moveCounter++;
+                    if (moveCounter % 2 == 1) {
+                        whoseTurn = "gray";
                     }
+                    if (moveCounter % 2 == 0) {
+                        whoseTurn = "white";
+                    }
+                    System.out.println("Now, it is " + whoseTurn + "'s turn!");
                 });
 
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
