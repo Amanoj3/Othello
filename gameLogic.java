@@ -7,6 +7,38 @@ public interface gameLogic { // part of the reason why I decided to make this in
     ////www.geeksforgeeks.org/interfaces-in-java/
     // in OOP
     // with the default keyword, a method CAN have a body in an interface...
+    default String getOppositeColor(String whoseTurn) {
+        if (whoseTurn.equals("white")) {
+            return "gray";
+        }
+        else {
+            return "white";
+        }
+    }
+
+    default void setCombination(String whoseTurn, ArrayList<Tile> tileLine, Tile clickedTile) {
+        // turns all the chips in a line into the color of the player's chip
+        // for example, if there is a diagonal line of white chips, that line will become gray if the white player
+        // plays such a move
+        if (tileLine.size() >=2) { // fix this
+            if (tileLine.get(tileLine.size()-1).getCurrentIcon().equals("empty")
+                    && tileLine.get(tileLine.size()-2).getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                System.out.println("yo");
+                return;
+            }
+            if (whoseTurn.equals("white")) {
+                for (int i = 0; i < tileLine.size()-1; i++) {
+                    tileLine.get(i).setWhiteChip();
+                }
+                clickedTile.setWhiteChip();
+            } else {
+                for (int i = 0; i < tileLine.size()-1; i++) {
+                    tileLine.get(i).setGrayChip();
+                }
+                clickedTile.setGrayChip();
+            }
+        }
+    }
 
     default void disableTiles(int boardWidth, int boardHeight, Tile[][] imageButtons, Icon white, Icon gray, Icon empty) {
         // this method disables all the tiles (so they won't be clickable)
@@ -39,9 +71,9 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return emptyTiles;
     }
 
-    default boolean emptyOrWhite(Tile tile) {
+    default boolean emptyOrWhoseTurn(Tile tile,String whoseTurn) {
         // if the slot is empty or has a white chip..
-        return tile.getCurrentIcon().equals("white") || tile.getCurrentIcon().equals("empty");
+        return tile.getCurrentIcon().equals(whoseTurn) || tile.getCurrentIcon().equals("empty");
     }
 
     default boolean isValidCombination(ArrayList<Tile> tiles, String whoseTurn) {
