@@ -99,6 +99,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     }//end upper right check
                 }
                 else {
+                    System.out.println("UpperRightTiles size: " + upperTiles.size());
                     setCombination(whoseTurn,upperRightTiles,currentEmptyTiles.get(i));
                 }
                 //lower left check
@@ -122,6 +123,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     }// end lower left check
                 }
                 else {
+                    System.out.println("lowerLeftTiles size: " + lowerLeftTiles.size());
                     setCombination(whoseTurn,lowerLeftTiles,currentEmptyTiles.get(i));
                 }
                 //lower check
@@ -144,6 +146,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     }// end lower check
                 }
                 else {
+                    System.out.println("lowerTiles size: " + lowerTiles.size());
                     setCombination(whoseTurn,lowerTiles,currentEmptyTiles.get(i));
                 }
                 //lower right check
@@ -167,6 +170,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     }//end lower right check
                 }
                 else {
+                    System.out.println("lowerRightTiles size: " + lowerRightTiles.size());
                     setCombination(whoseTurn,lowerRightTiles,currentEmptyTiles.get(i));
                 }
                 //left check
@@ -189,6 +193,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     }// end left check
                 }
                 else {
+                    System.out.println("leftTiles size: " + leftTiles.size());
                     setCombination(whoseTurn,leftTiles,currentEmptyTiles.get(i));
                 }
                 //right check
@@ -211,6 +216,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     }// end right check
                 }
                 else {
+                    System.out.println("rightTiles size: " + rightTiles.size());
                     setCombination(whoseTurn,rightTiles,currentEmptyTiles.get(i));
                 }
             }//end for each tile loop
@@ -261,6 +267,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     }
                     System.out.println("Now, it is " + whoseTurn + "'s turn!");
                     enableValidTiles(null);
+                    System.out.println("-------------------------------------");
                 });
 
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {

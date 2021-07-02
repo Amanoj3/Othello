@@ -27,13 +27,13 @@ public interface gameLogic { // part of the reason why I decided to make this in
                 return;
             }
             if (whoseTurn.equals("white")) {
-                for (int i = 0; i < tileLine.size()-1; i++) {
-                    tileLine.get(i).setWhiteChip();
+                for (int i = 0; i < tileLine.size() - 1; i++) {
+                        tileLine.get(i).setWhiteChip();
                 }
                 clickedTile.setWhiteChip();
             } else {
-                for (int i = 0; i < tileLine.size()-1; i++) {
-                    tileLine.get(i).setGrayChip();
+                for (int i = 0; i < tileLine.size() - 1; i++) {
+                        tileLine.get(i).setGrayChip();
                 }
                 clickedTile.setGrayChip();
             }
