@@ -1,8 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Board implements gameLogic{ // includes the board, which implements the gameLogic interface
@@ -10,218 +6,62 @@ public class Board implements gameLogic{ // includes the board, which implements
     private final int boardWidth;
     private final int boardHeight;
     private int moveCounter;
-    private Tile[][] imageButtons;
-    private Icon emptySlot, whiteChip, grayChip;
+    private final Tile[][] imageButtons;
+    private final Icon emptySlot;
+    private final Icon whiteChip;
+    private final Icon grayChip;
     private String whoseTurn;
 
     public boolean gameOver() {
         return numSlots == 0;
     }
 
-    public void enableValidTiles(Tile clickedTile) {
+    public void enableValidTiles() { // enables the tiles that should be clickable
         ArrayList<Tile> currentEmptyTiles = new ArrayList<Tile>();
-        if (clickedTile == null) {
-            currentEmptyTiles = obtainEmptyTiles(imageButtons,boardWidth,boardHeight);
-        }
-        else {
-            currentEmptyTiles.add(clickedTile);
-        }
+        currentEmptyTiles = obtainEmptyTiles(imageButtons,boardWidth,boardHeight);
+        for (Tile currentEmptyTile : currentEmptyTiles) { //for each tile, do..
+            // this loop checks if there are valid combinations for every empty tile
 
-            for (int i = 0; i < currentEmptyTiles.size(); i++) { //for each tile, do..
-                // this loop checks if there are valid combinations for every empty tile
-                ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
+            ArrayList<Tile> upperLeftTiles = getUpperLeftTiles(currentEmptyTile, boardHeight, imageButtons, whoseTurn);
+            if (isValidCombination(upperLeftTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
 
-                //check upper left diagonal
-                int currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
-                int currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
-                while (currentX >=0 && currentY < boardHeight) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        upperLeftTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        upperLeftTiles.add(imageButtons[currentX][currentY]);
-                    }
-                    currentX--;
-                    currentY++;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(upperLeftTiles,whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }// end upper left check
-                }
-                else {
-                    System.out.println("UpperLeftTiles size: " + upperLeftTiles.size());
-                    setCombination(whoseTurn,upperLeftTiles,currentEmptyTiles.get(i));
-                }
+            ArrayList<Tile> upperTiles = getUpperTiles(currentEmptyTile, boardHeight, imageButtons, whoseTurn);
+            if (isValidCombination(upperTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
 
-                //check upper
-                currentX = currentEmptyTiles.get(i).getxCoordinate();
-                currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
-                ArrayList<Tile> upperTiles = new ArrayList<>();
-                while (currentY < boardHeight) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        upperTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        upperTiles.add(imageButtons[currentX][currentY]);
-                    }
-                    currentY++;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(upperTiles, whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }//end upper check
-                }
-                else {
-                    System.out.println("UpperTiles size: " + upperTiles.size());
-                    setCombination(whoseTurn,upperTiles,currentEmptyTiles.get(i));
-                }
-                //upper right check
-                currentX = currentEmptyTiles.get(i).getxCoordinate()+1;
-                currentY = currentEmptyTiles.get(i).getyCoordinate()+1;
-                ArrayList<Tile> upperRightTiles = new ArrayList<Tile>();
-                while (currentX < boardWidth && currentY < boardHeight) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        upperRightTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        upperRightTiles.add(imageButtons[currentX][currentY]);
-                    }
-                    currentX++;
-                    currentY++;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(upperRightTiles, whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }//end upper right check
-                }
-                else {
-                    System.out.println("UpperRightTiles size: " + upperTiles.size());
-                    setCombination(whoseTurn,upperRightTiles,currentEmptyTiles.get(i));
-                }
-                //lower left check
-                currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
-                currentY = currentEmptyTiles.get(i).getyCoordinate()-1;
-                ArrayList<Tile> lowerLeftTiles = new ArrayList<Tile>();
-                while (currentX >= 0 && currentY >=0) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        lowerLeftTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        lowerLeftTiles.add(imageButtons[currentX][currentY]);
-                    }
-                    currentX--;
-                    currentY--;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(lowerLeftTiles, whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }// end lower left check
-                }
-                else {
-                    System.out.println("lowerLeftTiles size: " + lowerLeftTiles.size());
-                    setCombination(whoseTurn,lowerLeftTiles,currentEmptyTiles.get(i));
-                }
-                //lower check
-                currentX = currentEmptyTiles.get(i).getxCoordinate();
-                currentY = currentEmptyTiles.get(i).getyCoordinate()-1;
-                ArrayList<Tile> lowerTiles = new ArrayList<Tile>();
-                while (currentY >= 0) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        lowerTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        lowerTiles.add(imageButtons[currentX][currentX]);
-                    }
-                    currentY--;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(lowerTiles, whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }// end lower check
-                }
-                else {
-                    System.out.println("lowerTiles size: " + lowerTiles.size());
-                    setCombination(whoseTurn,lowerTiles,currentEmptyTiles.get(i));
-                }
-                //lower right check
-                currentX = currentEmptyTiles.get(i).getxCoordinate()+1;
-                currentY = currentEmptyTiles.get(i).getyCoordinate()-1;
-                ArrayList<Tile> lowerRightTiles = new ArrayList<Tile>();
-                while (currentX < boardWidth && currentY >=0) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        lowerRightTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        lowerRightTiles.add(imageButtons[currentX][currentY]);
-                    }
-                    currentX++;
-                    currentY--;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(lowerRightTiles, whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }//end lower right check
-                }
-                else {
-                    System.out.println("lowerRightTiles size: " + lowerRightTiles.size());
-                    setCombination(whoseTurn,lowerRightTiles,currentEmptyTiles.get(i));
-                }
-                //left check
-                currentX = currentEmptyTiles.get(i).getxCoordinate()-1;
-                currentY = currentEmptyTiles.get(i).getyCoordinate();
-                ArrayList<Tile> leftTiles = new ArrayList<Tile>();
-                while (currentX >= 0) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        leftTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        leftTiles.add(imageButtons[currentX][currentY]);
-                    }
-                    currentX--;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(leftTiles, whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }// end left check
-                }
-                else {
-                    System.out.println("leftTiles size: " + leftTiles.size());
-                    setCombination(whoseTurn,leftTiles,currentEmptyTiles.get(i));
-                }
-                //right check
-                currentX = currentEmptyTiles.get(i).getxCoordinate()+1;
-                currentY = currentEmptyTiles.get(i).getyCoordinate();
-                ArrayList<Tile> rightTiles = new ArrayList<Tile>();
-                while (currentX < boardWidth) {
-                    if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                        rightTiles.add(imageButtons[currentX][currentY]);
-                        break;
-                    }
-                    else {
-                        rightTiles.add(imageButtons[currentX][currentY]);
-                    }
-                    currentX++;
-                }
-                if (clickedTile == null) {
-                    if (isValidCombination(rightTiles, whoseTurn)) {
-                        currentEmptyTiles.get(i).setEnabled(true);
-                    }// end right check
-                }
-                else {
-                    System.out.println("rightTiles size: " + rightTiles.size());
-                    setCombination(whoseTurn,rightTiles,currentEmptyTiles.get(i));
-                }
-            }//end for each tile loop
+            ArrayList<Tile> upperRightTiles = getUpperRightTiles(currentEmptyTile, boardWidth, boardHeight, imageButtons, whoseTurn);
+            if (isValidCombination(upperRightTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
 
+            ArrayList<Tile> lowerLeftTiles = getLowerLeftTiles(currentEmptyTile, imageButtons, whoseTurn);
+            if (isValidCombination(lowerLeftTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
 
+            ArrayList<Tile> lowerTiles = getLowerTiles(currentEmptyTile, imageButtons, whoseTurn);
+            if (isValidCombination(lowerTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
+
+            ArrayList<Tile> lowerRightTiles = getLowerRightTiles(currentEmptyTile, boardWidth, imageButtons, whoseTurn);
+            if (isValidCombination(lowerRightTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
+            ArrayList<Tile> leftTiles = getLeftTiles(currentEmptyTile, imageButtons, whoseTurn);
+
+            if (isValidCombination(leftTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
+
+            ArrayList<Tile> rightTiles = getRightTiles(currentEmptyTile, boardWidth, imageButtons, whoseTurn);
+            if (isValidCombination(rightTiles, whoseTurn)) {
+                currentEmptyTile.setEnabled(true);
+            }
+        }//end for each tile loop
     } // end enableValidTile method
 
     public int getBoardWidth() {
@@ -256,7 +96,7 @@ public class Board implements gameLogic{ // includes the board, which implements
 // so each button would be able to detect clicks
                 currentButton.addActionListener(e -> {
                     System.out.println("You pressed button " + currentButton.getxCoordinate() + "," + currentButton.getyCoordinate());
-                    enableValidTiles(currentButton);
+                    enableValidTiles();
                     disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
                     moveCounter++;
                     if (moveCounter % 2 == 1) {
@@ -266,7 +106,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                         whoseTurn = "white";
                     }
                     System.out.println("Now, it is " + whoseTurn + "'s turn!");
-                    enableValidTiles(null);
+                    enableValidTiles();
                     System.out.println("-------------------------------------");
                 });
 
@@ -285,6 +125,6 @@ public class Board implements gameLogic{ // includes the board, which implements
         }
 
         disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
-        enableValidTiles( null);
+        enableValidTiles();
     }//end board constructor
 }
