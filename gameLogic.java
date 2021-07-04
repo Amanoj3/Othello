@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.image.renderable.RenderableImage;
 import java.util.ArrayList;
 
 public interface gameLogic { // part of the reason why I decided to make this interface is that I don't want to include
@@ -8,14 +9,37 @@ public interface gameLogic { // part of the reason why I decided to make this in
     // in OOP
     // with the default keyword, a method CAN have a body in an interface...
 
-    default ArrayList<Tile> getUpperLeftTiles(Tile currentEmptyTile, int boardHeight, Tile[][] imageButtons,String whoseTurn) {
+    default String getOppositeColor(String whoseTurn) {
+        if (whoseTurn.equals("white")) {
+            return "gray";
+        }
+        else {
+            return "white";
+        }
+    }
+
+    default void setChips(ArrayList<Tile> tiles, String whoseTurn) {
+        if (tiles.get(0).getCurrentIcon().equals(tiles.get(tiles.size() - 1).getCurrentIcon())) {
+            for (Tile tile : tiles) {
+                if (whoseTurn.equals("white")) {
+                    tile.setWhiteChip();
+                } else {
+                    tile.setGrayChip();
+                }
+            }
+        }
+    }
+
+    default ArrayList<Tile> getUpperLeftTiles(Tile currentEmptyTile, int boardHeight, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         //check upper left diagonal
         ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
         int currentX = currentEmptyTile.getxCoordinate()-1;
         int currentY = currentEmptyTile.getyCoordinate()+1;
         while (currentX >=0 && currentY < boardHeight) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                upperLeftTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    upperLeftTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -27,14 +51,16 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return upperLeftTiles;
     }
 
-    default ArrayList<Tile> getUpperTiles(Tile currentEmptyTile, int boardHeight, Tile[][] imageButtons,String whoseTurn) {
+    default ArrayList<Tile> getUpperTiles(Tile currentEmptyTile, int boardHeight, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         ArrayList<Tile> upperTiles = new ArrayList<Tile>();
         //check upper
         int currentX = currentEmptyTile.getxCoordinate();
         int currentY = currentEmptyTile.getyCoordinate()+1;
         while (currentY < boardHeight) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                upperTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    upperTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -45,13 +71,15 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return upperTiles;
     }
 
-    default ArrayList<Tile> getUpperRightTiles(Tile currentEmptyTile, int boardWidth, int boardHeight, Tile[][] imageButtons,String whoseTurn) {
+    default ArrayList<Tile> getUpperRightTiles(Tile currentEmptyTile, int boardWidth, int boardHeight, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         ArrayList<Tile> upperRightTiles = new ArrayList<Tile>();
         int currentX = currentEmptyTile.getxCoordinate()+1;
         int currentY = currentEmptyTile.getyCoordinate()+1;
         while (currentX < boardWidth && currentY < boardHeight) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                upperRightTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    upperRightTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -63,13 +91,15 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return upperRightTiles;
     }
 
-    default ArrayList<Tile> getLowerLeftTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn) {
+    default ArrayList<Tile> getLowerLeftTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()-1;
         int currentY = currentEmptyTile.getyCoordinate()-1;
         ArrayList<Tile> lowerLeftTiles = new ArrayList<Tile>();
         while (currentX >= 0 && currentY >=0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                lowerLeftTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    lowerLeftTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -81,13 +111,15 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return lowerLeftTiles;
     }
 
-    default ArrayList<Tile> getLowerTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn) {
+    default ArrayList<Tile> getLowerTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate();
         int currentY = currentEmptyTile.getyCoordinate()-1;
         ArrayList<Tile> lowerTiles = new ArrayList<Tile>();
         while (currentY >= 0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                lowerTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    lowerTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -98,13 +130,15 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return lowerTiles;
     }
 
-    default ArrayList<Tile> getLowerRightTiles(Tile currentEmptyTile, int boardWidth, Tile[][] imageButtons,String whoseTurn) {
+    default ArrayList<Tile> getLowerRightTiles(Tile currentEmptyTile, int boardWidth, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()+1;
         int currentY = currentEmptyTile.getyCoordinate()-1;
         ArrayList<Tile> lowerRightTiles = new ArrayList<Tile>();
         while (currentX < boardWidth && currentY >=0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                lowerRightTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    lowerRightTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -116,13 +150,15 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return lowerRightTiles;
     }
 
-    default ArrayList<Tile> getLeftTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn) {
+    default ArrayList<Tile> getLeftTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()-1;
         int currentY = currentEmptyTile.getyCoordinate();
         ArrayList<Tile> leftTiles = new ArrayList<Tile>();
         while (currentX >= 0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                leftTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    leftTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -133,13 +169,15 @@ public interface gameLogic { // part of the reason why I decided to make this in
         return leftTiles;
     }
 
-    default ArrayList<Tile> getRightTiles(Tile currentEmptyTile, int boardWidth, Tile[][] imageButtons,String whoseTurn) {
+    default ArrayList<Tile> getRightTiles(Tile currentEmptyTile, int boardWidth, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()+1;
         int currentY = currentEmptyTile.getyCoordinate();
         ArrayList<Tile> rightTiles = new ArrayList<Tile>();
         while (currentX < boardWidth) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
-                rightTiles.add(imageButtons[currentX][currentY]);
+                if (!setMode) {
+                    rightTiles.add(imageButtons[currentX][currentY]);
+                }
                 break;
             }
             else {
@@ -149,40 +187,243 @@ public interface gameLogic { // part of the reason why I decided to make this in
         }
         return rightTiles;
     }
+    // combo section below
+    default void lowerCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        ArrayList<Tile> lowerTiles = new ArrayList<Tile>();
+        lowerTiles.add(clickedTile);
 
-    default String getOppositeColor(String whoseTurn) {
-        if (whoseTurn.equals("white")) {
-            return "gray";
+        int curY = lowerTiles.get(0).getyCoordinate()-1;
+        int curX = lowerTiles.get(0).getxCoordinate();
+        boolean oppMode = false;
+        while (curY >= 0) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
+            }
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                lowerTiles.add(currentTile);
+                curY--;
+                continue;
+            }
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                lowerTiles.add(currentTile);
+                break;
+            }
+            curY--;
         }
-        else {
-            return "white";
-        }
+        setChips(lowerTiles,whoseTurn);
     }
 
-    default void setCombination(String whoseTurn, Tile clickedTile) {
-        // plan: get empty tile and check all directions without going out of bounds (upper left, up, down, etc.)
-        // then set all the appropriate tiles as white or gray depending on whose move it is
-        /*if (tileLine.size() >=2) { // fix this
-            if (tileLine.get(tileLine.size()-1).getCurrentIcon().equals("empty")
-                    && tileLine.get(tileLine.size()-2).getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
-                System.out.println("yo");
-                return;
+    default void lowerRightCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        int curX = clickedTile.getxCoordinate()+1;
+        int curY = clickedTile.getyCoordinate()-1;
+        ArrayList<Tile> lowerRightTiles = new ArrayList<Tile>();
+        lowerRightTiles.add(clickedTile);
+        boolean oppMode = false;
+        while (curX < 8 && curY >=0) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
             }
-            if (whoseTurn.equals("white")) {
-                for (int i = 0; i < tileLine.size() - 1; i++) {
-                        tileLine.get(i).setWhiteChip();
-                }
-                clickedTile.setWhiteChip();
-            } else {
-                for (int i = 0; i < tileLine.size() - 1; i++) {
-                        tileLine.get(i).setGrayChip();
-                }
-                clickedTile.setGrayChip();
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                lowerRightTiles.add(currentTile);
+                curY--;
+                curX++;
+                continue;
             }
-        }*/
-        //check upper left
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                lowerRightTiles.add(currentTile);
+                break;
+            }
+            curY--;
+            curX++;
+        }
+        setChips(lowerRightTiles,whoseTurn);
+    }
 
+    default void lowerLeftCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        int curX = clickedTile.getxCoordinate()-1;
+        int curY = clickedTile.getyCoordinate()-1;
+        ArrayList<Tile> lowerLeftTiles = new ArrayList<Tile>();
+        lowerLeftTiles.add(clickedTile);
+        boolean oppMode = false;
+        while (curX >= 0 && curY >=0) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
+            }
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                lowerLeftTiles.add(currentTile);
+                curY--;
+                curX--;
+                continue;
+            }
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                lowerLeftTiles.add(currentTile);
+                break;
+            }
+            curY--;
+            curX--;
+        }
+        setChips(lowerLeftTiles,whoseTurn);
+    }
 
+    default void upperRightCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        ArrayList<Tile> upperRightTiles = new ArrayList<Tile>();
+        int curX = clickedTile.getxCoordinate()+1;
+        int curY = clickedTile.getyCoordinate()+1;
+        upperRightTiles.add(clickedTile);
+        boolean oppMode = false;
+        while (curX < 8 && curY < 8) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
+            }
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                upperRightTiles.add(currentTile);
+                curY++;
+                curX++;
+                continue;
+            }
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                upperRightTiles.add(currentTile);
+                break;
+            }
+            curY++;
+            curX++;
+        }
+        setChips(upperRightTiles,whoseTurn);
+    }
+
+    default void upperCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        ArrayList<Tile> upperTiles = new ArrayList<Tile>();
+        upperTiles.add(clickedTile);
+        int curY = upperTiles.get(0).getyCoordinate()+1;
+        int curX = upperTiles.get(0).getxCoordinate();
+        boolean oppMode = false;
+        while (curY < 8) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
+            }
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                upperTiles.add(currentTile);
+                curY++;
+                continue;
+            }
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                upperTiles.add(currentTile);
+                break;
+            }
+            curY++;
+        }
+        setChips(upperTiles,whoseTurn);
+    }
+
+    default void upperLeftCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
+        int curX = clickedTile.getxCoordinate()-1;
+        int curY = clickedTile.getyCoordinate()+1;
+        upperLeftTiles.add(clickedTile);
+        boolean oppMode = false;
+        while (curX >=0 && curY < 8) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
+            }
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                upperLeftTiles.add(currentTile);
+                curY++;
+                curX--;
+                continue;
+            }
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                upperLeftTiles.add(currentTile);
+                break;
+            }
+            curY++;
+            curX--;
+        }
+        setChips(upperLeftTiles,whoseTurn);
+    }
+
+    default void leftCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        int curX = clickedTile.getxCoordinate()-1;
+        int curY = clickedTile.getyCoordinate();
+        ArrayList<Tile> leftTiles = new ArrayList<Tile>();
+        leftTiles.add(clickedTile);
+        boolean oppMode = false;
+        while (curX >= 0) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
+            }
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                leftTiles.add(currentTile);
+                curX--;
+                continue;
+            }
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                leftTiles.add(currentTile);
+                break;
+            }
+            curX--;
+        }
+        setChips(leftTiles,whoseTurn);
+    }
+
+    default void rightCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
+        int curX = clickedTile.getxCoordinate()+1;
+        int curY = clickedTile.getyCoordinate();
+        ArrayList<Tile> rightTiles = new ArrayList<Tile>();
+        rightTiles.add(clickedTile);
+        boolean oppMode = false;
+        while (curX < 8) {
+            Tile currentTile = imageButtons[curX][curY];
+            if (!oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                break;
+            }
+            if (currentTile.getCurrentIcon().equals(getOppositeColor(whoseTurn))) {
+                oppMode = true;
+                rightTiles.add(currentTile);
+                curX++;
+                continue;
+            }
+            if (oppMode && emptyOrWhoseTurn(currentTile,whoseTurn)) {
+                rightTiles.add(currentTile);
+                break;
+            }
+            curX++;
+        }
+        setChips(rightTiles,whoseTurn);
+    }
+
+    default void setCombination(String whoseTurn, Tile clickedTile, Tile[][] imageButtons) {
+
+        if (whoseTurn.equals("white")) {
+            clickedTile.setWhiteChip();
+        }
+        else {
+            clickedTile.setGrayChip();
+        }
+        //lower combinations
+        lowerCombo(clickedTile,imageButtons,whoseTurn);
+        lowerRightCombo(clickedTile,imageButtons,whoseTurn);
+        lowerLeftCombo(clickedTile,imageButtons,whoseTurn);
+        //upper combinations
+        upperRightCombo(clickedTile,imageButtons,whoseTurn);
+        upperCombo(clickedTile,imageButtons,whoseTurn);
+        upperLeftCombo(clickedTile,imageButtons,whoseTurn);
+        //horizontal combinations
+        leftCombo(clickedTile,imageButtons,whoseTurn);
+        rightCombo(clickedTile,imageButtons,whoseTurn);
     }
 
     default void disableTiles(int boardWidth, int boardHeight, Tile[][] imageButtons, Icon white, Icon gray, Icon empty) {

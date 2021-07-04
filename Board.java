@@ -22,42 +22,42 @@ public class Board implements gameLogic{ // includes the board, which implements
         for (Tile currentEmptyTile : currentEmptyTiles) { //for each tile, do..
             // this loop checks if there are valid combinations for every empty tile
 
-            ArrayList<Tile> upperLeftTiles = getUpperLeftTiles(currentEmptyTile, boardHeight, imageButtons, whoseTurn);
+            ArrayList<Tile> upperLeftTiles = getUpperLeftTiles(currentEmptyTile, boardHeight, imageButtons, whoseTurn, false);
             if (isValidCombination(upperLeftTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
 
-            ArrayList<Tile> upperTiles = getUpperTiles(currentEmptyTile, boardHeight, imageButtons, whoseTurn);
+            ArrayList<Tile> upperTiles = getUpperTiles(currentEmptyTile, boardHeight, imageButtons, whoseTurn, false);
             if (isValidCombination(upperTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
 
-            ArrayList<Tile> upperRightTiles = getUpperRightTiles(currentEmptyTile, boardWidth, boardHeight, imageButtons, whoseTurn);
+            ArrayList<Tile> upperRightTiles = getUpperRightTiles(currentEmptyTile, boardWidth, boardHeight, imageButtons, whoseTurn, false);
             if (isValidCombination(upperRightTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
 
-            ArrayList<Tile> lowerLeftTiles = getLowerLeftTiles(currentEmptyTile, imageButtons, whoseTurn);
+            ArrayList<Tile> lowerLeftTiles = getLowerLeftTiles(currentEmptyTile, imageButtons, whoseTurn, false);
             if (isValidCombination(lowerLeftTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
 
-            ArrayList<Tile> lowerTiles = getLowerTiles(currentEmptyTile, imageButtons, whoseTurn);
+            ArrayList<Tile> lowerTiles = getLowerTiles(currentEmptyTile, imageButtons, whoseTurn, false);
             if (isValidCombination(lowerTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
 
-            ArrayList<Tile> lowerRightTiles = getLowerRightTiles(currentEmptyTile, boardWidth, imageButtons, whoseTurn);
+            ArrayList<Tile> lowerRightTiles = getLowerRightTiles(currentEmptyTile, boardWidth, imageButtons, whoseTurn, false);
             if (isValidCombination(lowerRightTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
-            ArrayList<Tile> leftTiles = getLeftTiles(currentEmptyTile, imageButtons, whoseTurn);
+            ArrayList<Tile> leftTiles = getLeftTiles(currentEmptyTile, imageButtons, whoseTurn, false);
 
             if (isValidCombination(leftTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
 
-            ArrayList<Tile> rightTiles = getRightTiles(currentEmptyTile, boardWidth, imageButtons, whoseTurn);
+            ArrayList<Tile> rightTiles = getRightTiles(currentEmptyTile, boardWidth, imageButtons, whoseTurn, false);
             if (isValidCombination(rightTiles, whoseTurn)) {
                 currentEmptyTile.setEnabled(true);
             }
@@ -97,6 +97,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                 currentButton.addActionListener(e -> {
                     System.out.println("You pressed button " + currentButton.getxCoordinate() + "," + currentButton.getyCoordinate());
                     enableValidTiles();
+                    setCombination(whoseTurn,currentButton,imageButtons);
                     disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
                     moveCounter++;
                     if (moveCounter % 2 == 1) {
