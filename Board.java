@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Board implements gameLogic{ // includes the board, which implements the gameLogic interface
@@ -11,9 +12,45 @@ public class Board implements gameLogic{ // includes the board, which implements
     private final Icon whiteChip;
     private final Icon grayChip;
     private String whoseTurn;
-
+    private int numWhiteChips;
+    private int numGrayChips;
+    private JLabel whiteChipLabel;
+    private JLabel grayChipLabel;
     public boolean gameOver() {
         return numSlots == 0;
+    }
+
+    public JLabel getWhiteChipLabel() {
+        return whiteChipLabel;
+    }
+
+    public JLabel getGrayChipLabel() {
+        return grayChipLabel;
+    }
+
+    public int getNumWhiteChips() {
+        return numWhiteChips;
+    }
+
+    public int getNumGrayChips() {
+        return numGrayChips;
+    }
+
+    public void setNumChips(Tile[][] imageButtons) {
+        int whiteChips = 0;
+        int grayChips = 0;
+        for (int i = 0; i < boardWidth; i++) {
+            for (int j = 0; j < boardHeight; j++) {
+                if (imageButtons[i][j].getCurrentIcon().equals("white")) {
+                    whiteChips++;
+                }
+                if (imageButtons[i][j].getCurrentIcon().equals("gray")) {
+                    grayChips++;
+                }
+            }
+        }
+        numWhiteChips = whiteChips;
+        numGrayChips = grayChips;
     }
 
     public void enableValidTiles() { // enables the tiles that should be clickable
@@ -100,6 +137,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     setCombination(whoseTurn,currentButton,imageButtons);
                     disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
                     moveCounter++;
+                    numSlots--;
                     if (moveCounter % 2 == 1) {
                         whoseTurn = "gray";
                     }
@@ -109,6 +147,9 @@ public class Board implements gameLogic{ // includes the board, which implements
                     System.out.println("Now, it is " + whoseTurn + "'s turn!");
                     enableValidTiles();
                     System.out.println("-------------------------------------");
+                    setNumChips(imageButtons);
+                    whiteChipLabel.setText("White chips: " + numWhiteChips);
+                    grayChipLabel.setText("Gray chips: " + numGrayChips);
                 });
 
                 if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
@@ -124,7 +165,15 @@ public class Board implements gameLogic{ // includes the board, which implements
             }
             startingX = startingX + incrementFactorX;
         }
-
+        setNumChips(imageButtons);
+        whiteChipLabel = new JLabel("White chips: " + numWhiteChips);
+        whiteChipLabel.setForeground(Color.yellow);
+        whiteChipLabel.setBounds(10,10,200,50);
+        whiteChipLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        grayChipLabel = new JLabel("Gray chips: " + numGrayChips);
+        grayChipLabel.setForeground(Color.yellow);
+        grayChipLabel.setBounds(440,10,200,50);
+        grayChipLabel.setFont(new Font("Arial", Font.BOLD, 20));
         disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
         enableValidTiles();
     }//end board constructor

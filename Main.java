@@ -11,7 +11,11 @@ public class Main { // the driver file - also contains the view
         int x = 115;
         int y = 450;
         JLabel[] yCoordinateLabels = new JLabel[8];
-
+        //JLabel numWhiteChips = new JLabel(String.valueOf(othelloBoard.getNumWhiteChips()));
+        //numWhiteChips.setForeground(Color.yellow);
+        //numWhiteChips.setBounds(150,10,50,50);
+        window.add(othelloBoard.getWhiteChipLabel());
+        window.add(othelloBoard.getGrayChipLabel());
         for (int i = 0; i < 8; i++) {
             //initialize the labels individually
             xCoordinateLabels[i] = new JLabel(Integer.toString(i));

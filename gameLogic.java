@@ -1,7 +1,8 @@
 import javax.swing.*;
 import java.awt.image.renderable.RenderableImage;
 import java.util.ArrayList;
-
+//TO DO (AS OF 7/3/21 11:05 PM):
+// TAKE INTO ACCOUNT THE SCENARIO WHERE PLAYER X DOESN'T HAVE ANY VALID SQUARES (MOVES)
 public interface gameLogic { // part of the reason why I decided to make this interface is that I don't want to include
     //too many lines of code in the Board.java file.. Besides, this interface would be a good use of the abstraction principle
     //see stackoverflow.com/questions/5309260/in-java-can-we-divide-a-class-into-multiple-files
