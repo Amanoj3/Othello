@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-//TO DO (AS OF 7/4/21): IMPLEMENT TEST CASES VIA JUNIT
+//TO DO (AS OF 7/4/21): IMPLEMENT TEST CASES VIA JUNIT AND TAKE CARE OF THE CASE WHERE NEITHER PLAYER CAN MAKE A MOVE
 public class Board implements gameLogic{ // includes the board, which implements the gameLogic interface
     private int numSlots; // decreases as tiles get populated with chips
     private final int boardWidth; // width of the board
@@ -17,6 +17,7 @@ public class Board implements gameLogic{ // includes the board, which implements
     private JLabel grayChipLabel; // displays how many chips black has on the window
     private final JLabel whoWon; // displays who won (gray or white)
     private JLabel turnLabel; // if white or gray loses a turn, this label would indicate it as such
+    private boolean noValidMoves;
 
     public JLabel getTurnLabel() { // used in Main.java
         return turnLabel;
@@ -40,7 +41,7 @@ public class Board implements gameLogic{ // includes the board, which implements
     }
 
     public boolean gameOver() {
-        return numSlots == 0;
+        return numSlots == 0 || noValidMoves;
     } // if there are no more slots remaining, the game is over
 
     public JLabel getWhiteChipLabel() {
@@ -127,6 +128,7 @@ public class Board implements gameLogic{ // includes the board, which implements
     } // also used in Main.java
 
     Board() {
+        noValidMoves = false;
         whoseTurn = "white";
         //moveCounter = 0;
         boardWidth = 8;
@@ -169,6 +171,9 @@ public class Board implements gameLogic{ // includes the board, which implements
                         turnLabel.setText(whoseTurn + " cannot move (loses a turn)");
                         whoseTurn = getOppositeColor(whoseTurn);
                         enableValidTiles();
+                        if (!clickableTileExists(imageButtons)) { // if neither side can make a valid move, game over
+                            noValidMoves = true;
+                        }
                     }
 
 
@@ -179,7 +184,7 @@ public class Board implements gameLogic{ // includes the board, which implements
                     System.out.println("Num slots remaining: " + numSlots);
                     if (gameOver()) {
                         turnLabel.setVisible(false);
-                        System.out.println("GAME OVER!!");
+                        //System.out.println("GAME OVER!!");
                         setWhoWon();
                     }
 
