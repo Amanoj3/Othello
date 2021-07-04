@@ -1,12 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+//TO DO (AS OF 7/4/21): IMPLEMENT TEST CASES VIA JUNIT
 public class Board implements gameLogic{ // includes the board, which implements the gameLogic interface
     private int numSlots; // decreases as tiles get populated with chips
     private final int boardWidth; // width of the board
     private final int boardHeight; // height of the board
-    private int moveCounter; // keeps track of the number of moves
     private final Tile[][] imageButtons; // each tile is a clickable button that can have a gray chip or a white one
     private final Icon emptySlot; //these are icons that the tiles will bear
     private final Icon whiteChip;
@@ -19,7 +18,7 @@ public class Board implements gameLogic{ // includes the board, which implements
     private final JLabel whoWon; // displays who won (gray or white)
     private JLabel turnLabel; // if white or gray loses a turn, this label would indicate it as such
 
-    public JLabel getTurnLabel() {
+    public JLabel getTurnLabel() { // used in Main.java
         return turnLabel;
     }
 
@@ -52,7 +51,7 @@ public class Board implements gameLogic{ // includes the board, which implements
         return grayChipLabel;
     } //getter method used in Main.java
 
-    public void setNumChips(Tile[][] imageButtons) {
+    public void setNumChips(Tile[][] imageButtons) { // this determines how many chips a player has on the board
         int whiteChips = 0;
         int grayChips = 0;
         for (int i = 0; i < boardWidth; i++) {
@@ -119,17 +118,17 @@ public class Board implements gameLogic{ // includes the board, which implements
 
     public int getBoardWidth() {
         return this.boardWidth;
-    }
+    } // getters
     public int getBoardHeight() {
         return this.boardHeight;
     }
     public Tile[][] getImageButtons() {
         return this.imageButtons;
-    }
+    } // also used in Main.java
 
     Board() {
         whoseTurn = "white";
-        moveCounter = 0;
+        //moveCounter = 0;
         boardWidth = 8;
         boardHeight = 8;
         imageButtons = new Tile[boardWidth][boardHeight];
@@ -137,31 +136,32 @@ public class Board implements gameLogic{ // includes the board, which implements
         emptySlot = new ImageIcon("src/othello_emptySlot.png");
         whiteChip = new ImageIcon("src/othello_whiteChip.png");
         grayChip = new ImageIcon("src/othello_grayChip.png");
-        int startingX = 95;
+        int startingX = 95; // the tile's coordinate points (for the GUI window)
         int startingY;
-        int incrementFactorX = 50;
+        int incrementFactorX = 50; // the increment factors allow you to lay out the tiles in a neat manner
         int incrementFactorY = 50;
         for (int i = 0; i < boardWidth; i++) {
             startingY = 450;
             for (int j = 0; j < boardHeight; j++) { // middle buttons: (3,4), (4,4) = gray, (3,3) = gray, (4,3)
-                Tile currentButton = new Tile(i,j);
+                Tile currentButton = new Tile(i,j); // make an instance of a tile where i and j represent their location
+                //in the 2D array (like coordinate pairs)
                 //"two or more, use a for" - E. Dijkstra
-// so each button would be able to detect clicks
 
+                // so each button would be able to detect clicks
                 currentButton.addActionListener(e -> {
                     //System.out.println("You pressed button " + currentButton.getxCoordinate() + "," + currentButton.getyCoordinate());
-                    enableValidTiles();
-                    setCombination(whoseTurn,currentButton,imageButtons);
+                    enableValidTiles(); // enables the tiles that must be clickable
+                    setCombination(whoseTurn,currentButton,imageButtons); // if a player chooses a tile
+                    //the appropriate line(s) gets captured
                     disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
-                    moveCounter++;
                     numSlots--;
-                    if (moveCounter % 2 == 1) {
+                    if (whoseTurn.equals("white")) { // its the other player's turn now
                         whoseTurn = "gray";
                     }
-                    if (moveCounter % 2 == 0) {
+                    else {
                         whoseTurn = "white";
                     }
-                    turnLabel.setText(whoseTurn + "'s turn!");
+                    turnLabel.setText(whoseTurn + "'s turn!"); // whose turn is it?
                     //System.out.println("Now, it is " + whoseTurn + "'s turn!");
                     enableValidTiles();
 
@@ -185,10 +185,10 @@ public class Board implements gameLogic{ // includes the board, which implements
 
                 });
 
-                if ((i == 3 && j == 4) || (i == 4 && j == 3)) {
+                if ((i == 3 && j == 4) || (i == 4 && j == 3)) { // this sets the central pieces
                     currentButton.setWhiteChip();
                 }
-                if ((i == 4 & j == 4) || (i == 3 && j ==3)) {
+                if ((i == 4 & j == 4) || (i == 3 && j ==3)) { // this sets the central pieces
                     currentButton.setGrayChip();
                 }
 
@@ -200,12 +200,12 @@ public class Board implements gameLogic{ // includes the board, which implements
         }
         setNumChips(imageButtons);
         turnLabel = new JLabel(whoseTurn+ "'s turn!");
-        turnLabel.setForeground(Color.yellow);
-        turnLabel.setBounds(240,60,400,50);
+        turnLabel.setForeground(Color.yellow); // text color
+        turnLabel.setBounds(240,60,400,50); // the location of the label
         turnLabel.setVisible(true);
         turnLabel.setFont(new Font("Arial", Font.BOLD, 15));
         whiteChipLabel = new JLabel("White chips: " + numWhiteChips);
-        whiteChipLabel.setForeground(Color.yellow);
+        whiteChipLabel.setForeground(Color.yellow); // text color
         whiteChipLabel.setBounds(10,10,200,50);
         whiteChipLabel.setFont(new Font("Arial", Font.BOLD, 20));
         grayChipLabel = new JLabel("Gray chips: " + numGrayChips);
@@ -213,10 +213,10 @@ public class Board implements gameLogic{ // includes the board, which implements
         grayChipLabel.setBounds(440,10,200,50);
         grayChipLabel.setFont(new Font("Arial", Font.BOLD, 20));
         whoWon = new JLabel("");
-        whoWon.setForeground(Color.yellow);
+        whoWon.setForeground(Color.yellow); // text color
         whoWon.setFont(new Font("Arial", Font.BOLD, 20));
         whoWon.setBounds(240,10, 200,50);
-        whoWon.setVisible(false);
+        whoWon.setVisible(false); //this only becomes visible once the winner has been determined
         disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
         enableValidTiles();
     }//end board constructor
