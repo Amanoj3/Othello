@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Main { // the driver file - also contains the view
 
-    public static void setUp() {
+    public static void setUp() { // the window that contains the GUI components
 
         Board othelloBoard = new Board();
         JFrame window = new JFrame("Othello");
@@ -11,11 +11,14 @@ public class Main { // the driver file - also contains the view
         int x = 115;
         int y = 450;
         JLabel[] yCoordinateLabels = new JLabel[8];
-        //JLabel numWhiteChips = new JLabel(String.valueOf(othelloBoard.getNumWhiteChips()));
-        //numWhiteChips.setForeground(Color.yellow);
-        //numWhiteChips.setBounds(150,10,50,50);
+        // white player's score
         window.add(othelloBoard.getWhiteChipLabel());
+        //gray player's score
         window.add(othelloBoard.getGrayChipLabel());
+        //label that indicates who won
+        window.add(othelloBoard.getWhoWon());
+        //label that indicates whose turn it is
+        window.add(othelloBoard.getTurnLabel());
         for (int i = 0; i < 8; i++) {
             //initialize the labels individually
             xCoordinateLabels[i] = new JLabel(Integer.toString(i));

@@ -1,14 +1,22 @@
 import javax.swing.*;
-import java.awt.image.renderable.RenderableImage;
 import java.util.ArrayList;
-//TO DO (AS OF 7/3/21 11:05 PM):
-// TAKE INTO ACCOUNT THE SCENARIO WHERE PLAYER X DOESN'T HAVE ANY VALID SQUARES (MOVES)
 public interface gameLogic { // part of the reason why I decided to make this interface is that I don't want to include
     //too many lines of code in the Board.java file.. Besides, this interface would be a good use of the abstraction principle
     //see stackoverflow.com/questions/5309260/in-java-can-we-divide-a-class-into-multiple-files
     ////www.geeksforgeeks.org/interfaces-in-java/
     // in OOP
     // with the default keyword, a method CAN have a body in an interface...
+
+    default boolean clickableTileExists(Tile[][] imageButtons) {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (imageButtons[x][y].isEnabled()) { // if there is at least ONE clickable button, return true
+                    return true;
+                }
+            }
+        }
+        return false; // no clickable tiles found
+    }
 
     default String getOppositeColor(String whoseTurn) {
         if (whoseTurn.equals("white")) {
@@ -33,7 +41,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
 
     default ArrayList<Tile> getUpperLeftTiles(Tile currentEmptyTile, int boardHeight, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         //check upper left diagonal
-        ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
+        ArrayList<Tile> upperLeftTiles = new ArrayList<>();
         int currentX = currentEmptyTile.getxCoordinate()-1;
         int currentY = currentEmptyTile.getyCoordinate()+1;
         while (currentX >=0 && currentY < boardHeight) {
@@ -53,7 +61,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     }
 
     default ArrayList<Tile> getUpperTiles(Tile currentEmptyTile, int boardHeight, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
-        ArrayList<Tile> upperTiles = new ArrayList<Tile>();
+        ArrayList<Tile> upperTiles = new ArrayList<>();
         //check upper
         int currentX = currentEmptyTile.getxCoordinate();
         int currentY = currentEmptyTile.getyCoordinate()+1;
@@ -73,7 +81,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     }
 
     default ArrayList<Tile> getUpperRightTiles(Tile currentEmptyTile, int boardWidth, int boardHeight, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
-        ArrayList<Tile> upperRightTiles = new ArrayList<Tile>();
+        ArrayList<Tile> upperRightTiles = new ArrayList<>();
         int currentX = currentEmptyTile.getxCoordinate()+1;
         int currentY = currentEmptyTile.getyCoordinate()+1;
         while (currentX < boardWidth && currentY < boardHeight) {
@@ -95,7 +103,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default ArrayList<Tile> getLowerLeftTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()-1;
         int currentY = currentEmptyTile.getyCoordinate()-1;
-        ArrayList<Tile> lowerLeftTiles = new ArrayList<Tile>();
+        ArrayList<Tile> lowerLeftTiles = new ArrayList<>();
         while (currentX >= 0 && currentY >=0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
                 if (!setMode) {
@@ -115,7 +123,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default ArrayList<Tile> getLowerTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate();
         int currentY = currentEmptyTile.getyCoordinate()-1;
-        ArrayList<Tile> lowerTiles = new ArrayList<Tile>();
+        ArrayList<Tile> lowerTiles = new ArrayList<>();
         while (currentY >= 0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
                 if (!setMode) {
@@ -134,7 +142,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default ArrayList<Tile> getLowerRightTiles(Tile currentEmptyTile, int boardWidth, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()+1;
         int currentY = currentEmptyTile.getyCoordinate()-1;
-        ArrayList<Tile> lowerRightTiles = new ArrayList<Tile>();
+        ArrayList<Tile> lowerRightTiles = new ArrayList<>();
         while (currentX < boardWidth && currentY >=0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
                 if (!setMode) {
@@ -154,7 +162,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default ArrayList<Tile> getLeftTiles(Tile currentEmptyTile, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()-1;
         int currentY = currentEmptyTile.getyCoordinate();
-        ArrayList<Tile> leftTiles = new ArrayList<Tile>();
+        ArrayList<Tile> leftTiles = new ArrayList<>();
         while (currentX >= 0) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
                 if (!setMode) {
@@ -173,7 +181,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default ArrayList<Tile> getRightTiles(Tile currentEmptyTile, int boardWidth, Tile[][] imageButtons,String whoseTurn, boolean setMode) {
         int currentX = currentEmptyTile.getxCoordinate()+1;
         int currentY = currentEmptyTile.getyCoordinate();
-        ArrayList<Tile> rightTiles = new ArrayList<Tile>();
+        ArrayList<Tile> rightTiles = new ArrayList<>();
         while (currentX < boardWidth) {
             if (emptyOrWhoseTurn(imageButtons[currentX][currentY],whoseTurn)) {
                 if (!setMode) {
@@ -190,7 +198,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     }
     // combo section below
     default void lowerCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
-        ArrayList<Tile> lowerTiles = new ArrayList<Tile>();
+        ArrayList<Tile> lowerTiles = new ArrayList<>();
         lowerTiles.add(clickedTile);
 
         int curY = lowerTiles.get(0).getyCoordinate()-1;
@@ -219,7 +227,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default void lowerRightCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
         int curX = clickedTile.getxCoordinate()+1;
         int curY = clickedTile.getyCoordinate()-1;
-        ArrayList<Tile> lowerRightTiles = new ArrayList<Tile>();
+        ArrayList<Tile> lowerRightTiles = new ArrayList<>();
         lowerRightTiles.add(clickedTile);
         boolean oppMode = false;
         while (curX < 8 && curY >=0) {
@@ -247,7 +255,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default void lowerLeftCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
         int curX = clickedTile.getxCoordinate()-1;
         int curY = clickedTile.getyCoordinate()-1;
-        ArrayList<Tile> lowerLeftTiles = new ArrayList<Tile>();
+        ArrayList<Tile> lowerLeftTiles = new ArrayList<>();
         lowerLeftTiles.add(clickedTile);
         boolean oppMode = false;
         while (curX >= 0 && curY >=0) {
@@ -273,7 +281,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     }
 
     default void upperRightCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
-        ArrayList<Tile> upperRightTiles = new ArrayList<Tile>();
+        ArrayList<Tile> upperRightTiles = new ArrayList<>();
         int curX = clickedTile.getxCoordinate()+1;
         int curY = clickedTile.getyCoordinate()+1;
         upperRightTiles.add(clickedTile);
@@ -301,7 +309,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     }
 
     default void upperCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
-        ArrayList<Tile> upperTiles = new ArrayList<Tile>();
+        ArrayList<Tile> upperTiles = new ArrayList<>();
         upperTiles.add(clickedTile);
         int curY = upperTiles.get(0).getyCoordinate()+1;
         int curX = upperTiles.get(0).getxCoordinate();
@@ -327,7 +335,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     }
 
     default void upperLeftCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
-        ArrayList<Tile> upperLeftTiles = new ArrayList<Tile>();
+        ArrayList<Tile> upperLeftTiles = new ArrayList<>();
         int curX = clickedTile.getxCoordinate()-1;
         int curY = clickedTile.getyCoordinate()+1;
         upperLeftTiles.add(clickedTile);
@@ -357,7 +365,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default void leftCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
         int curX = clickedTile.getxCoordinate()-1;
         int curY = clickedTile.getyCoordinate();
-        ArrayList<Tile> leftTiles = new ArrayList<Tile>();
+        ArrayList<Tile> leftTiles = new ArrayList<>();
         leftTiles.add(clickedTile);
         boolean oppMode = false;
         while (curX >= 0) {
@@ -383,7 +391,7 @@ public interface gameLogic { // part of the reason why I decided to make this in
     default void rightCombo(Tile clickedTile, Tile[][] imageButtons, String whoseTurn) {
         int curX = clickedTile.getxCoordinate()+1;
         int curY = clickedTile.getyCoordinate();
-        ArrayList<Tile> rightTiles = new ArrayList<Tile>();
+        ArrayList<Tile> rightTiles = new ArrayList<>();
         rightTiles.add(clickedTile);
         boolean oppMode = false;
         while (curX < 8) {
