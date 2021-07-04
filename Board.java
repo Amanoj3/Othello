@@ -27,6 +27,18 @@ public class Board implements gameLogic{ // includes the board, which implements
         return whoWon;
     }
 
+    public int getNumWhiteChips() {
+        return numWhiteChips;
+    }
+
+    public int getNumGrayChips() {
+        return numGrayChips;
+    }
+
+    public int getNumSlots() {
+        return numSlots;
+    }
+
     public void setWhoWon() { // this method sets the whoWon JLabel based on how many chips each player has
         if (numWhiteChips > numGrayChips) {
             whoWon.setText("White won!");
