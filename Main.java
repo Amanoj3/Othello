@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Main { // the driver file - also contains the view
-
+// I basically utilized a model-view-controller design pattern (MVC). Board.java is the model whereas gameLogic is the controller.
     public static void setUp() { // the window that contains the GUI components
 
         Board othelloBoard = new Board();

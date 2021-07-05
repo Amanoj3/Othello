@@ -58,5 +58,17 @@ public class unitTests {
         assertEquals(4, enabledButtons); // There are four enabled buttons at first
         assertEquals(60,disabledButtons); // the rest are disabled
     }
-
+    @Test
+    public void gameplayTest1() { // #8
+        while (!exampleBoard.gameOver()) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (exampleBoard.getImageButtons()[i][j].isEnabled()) {
+                        exampleBoard.getImageButtons()[i][j].doClick();
+                    }
+                }
+            }
+        }
+        assertEquals(0,exampleBoard.getNumSlots());
+    }
 }
