@@ -19,6 +19,12 @@ public class Board implements gameLogic{ // includes the board, which implements
     private JLabel turnLabel; // if white or gray loses a turn, this label would indicate it as such
     private boolean noValidMoves;
 
+    public boolean getNoValidMoves() {
+        return noValidMoves;
+    }
+    public String getWhoseTurn() {
+        return whoseTurn;
+    }
     public JLabel getTurnLabel() { // used in Main.java
         return turnLabel;
     }
