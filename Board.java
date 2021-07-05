@@ -18,6 +18,11 @@ public class Board implements gameLogic{ // includes the board, which implements
     private final JLabel whoWon; // displays who won (gray or white)
     private JLabel turnLabel; // if white or gray loses a turn, this label would indicate it as such
     private boolean noValidMoves;
+    private final JButton resetButton;
+
+    public JButton getResetButton() {
+        return resetButton;
+    }
 
     public boolean getNoValidMoves() {
         return noValidMoves;
@@ -145,7 +150,36 @@ public class Board implements gameLogic{ // includes the board, which implements
         return this.imageButtons;
     } // also used in Main.java
 
+    public void resetGame() { // Invoke this method to reset the game or start a new one
+        for (int i = 0; i < 8; i++) { // this nested loop resets the tiles
+            for (int j = 0; j < 8; j++) {
+                if ((i == 3 && j == 4) || (i == 4 && j == 3)) { // this sets the central pieces
+                    imageButtons[i][j].setWhiteChip();
+                    continue;
+                }
+                if ((i == 4 & j == 4) || (i == 3 && j ==3)) { // this sets the central pieces
+                    imageButtons[i][j].setGrayChip();
+                    continue;
+                }
+                imageButtons[i][j].setEmptyChip();
+            }
+        }
+        setNumChips(imageButtons); // reset the number of chips
+        noValidMoves = false; // this become false as the game restarts
+        whoseTurn = "white"; // white moves first
+        numSlots = (boardWidth*boardHeight)-4; // 60
+        turnLabel.setText(whoseTurn + "'s turn!"); // white's turn
+        turnLabel.setVisible(true);
+        whiteChipLabel.setText("White chips: " + numWhiteChips); // 2
+        grayChipLabel.setText("Gray chips: " + numGrayChips); // 2
+        whoWon.setText("");
+        whoWon.setVisible(false);
+        disableTiles(boardWidth,boardHeight,imageButtons,whiteChip,grayChip,emptySlot);
+        enableValidTiles();
+    }
+
     Board() {
+        resetButton = new JButton("Reset/New Game");
         noValidMoves = false;
         whoseTurn = "white";
         //moveCounter = 0;
@@ -221,10 +255,15 @@ public class Board implements gameLogic{ // includes the board, which implements
             }
             startingX = startingX + incrementFactorX;
         }
+
+        resetButton.setBounds(220,600,150,40); // the location of the resetButton and its size
+        resetButton.addActionListener(e -> { // action listener for the reset button
+            resetGame(); // the method that actually resets the appropriate components of the game
+        });
         setNumChips(imageButtons);
         turnLabel = new JLabel(whoseTurn+ "'s turn!");
         turnLabel.setForeground(Color.yellow); // text color
-        turnLabel.setBounds(240,60,400,50); // the location of the label
+        turnLabel.setBounds(250,60,400,50); // the location of the label
         turnLabel.setVisible(true);
         turnLabel.setFont(new Font("Arial", Font.BOLD, 15));
         whiteChipLabel = new JLabel("White chips: " + numWhiteChips);

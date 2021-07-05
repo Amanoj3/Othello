@@ -19,6 +19,8 @@ public class Main { // the driver file - also contains the view
         window.add(othelloBoard.getWhoWon());
         //label that indicates whose turn it is
         window.add(othelloBoard.getTurnLabel());
+        //reset button
+        window.add(othelloBoard.getResetButton());
         for (int i = 0; i < 8; i++) {
             //initialize the labels individually
             xCoordinateLabels[i] = new JLabel(Integer.toString(i));
