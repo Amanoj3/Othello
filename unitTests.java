@@ -70,5 +70,13 @@ public class unitTests {
             }
         }
         assertEquals(0,exampleBoard.getNumSlots());
+        exampleBoard.resetGame();
+        numSlotsTest();
+        numChipsTest();
+        gameOverTest();
+        widthHeightTest();
+        noValidMovesTest();
+        labelsTest();
+        miscellaneousTest();
     }
 }
